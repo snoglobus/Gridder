@@ -33,6 +33,7 @@ def resize_image(input_image, max_size=(10000, 10000)):
 
     return input_image
 
+
 def paste_image(png_files, used_image_indices, blank_image, cell_width, cell_height, grid_tuple):
     i, j = grid_tuple
     available_image_indices = [index for index in range(len(png_files)) if index not in used_image_indices]
@@ -125,6 +126,14 @@ def start_gui():
     input_dir_dropdown = tk.OptionMenu(window, input_dir_var, *input_dir_options, command=None)  # Changed command to None
     input_dir_dropdown.grid(row=6, column=1)
 
+    def on_sort_button_click():
+        script_path = os.path.abspath(__file__)  # Get the full path of the main script
+        script_dir = os.path.dirname(script_path)  # Get the directory of the main script
+        sorter_path = os.path.join(script_dir, 'sorter.py')  # Construct the absolute path to the sorter.py file
+        os.system(f'python3 {sorter_path}')
+        update_folder_input()
+        messagebox.showinfo("Done", "Images have been sorted!")
+
     def on_run_button_click():
         grid_width = int(grid_width_input.get()) if grid_width_input.get() else 5
         grid_height = int(grid_height_input.get()) if grid_height_input.get() else 5
@@ -158,8 +167,10 @@ def start_gui():
 
     run_button = tk.Button(window, text="Run", command=on_run_button_click)
     browse_button = tk.Button(window, text="Browse", command=on_browse_button_click)
-    run_button.grid(row=7, column=1)
-    browse_button.grid(row=5, column=2)
+    sort_button = tk.Button(window, text="Sort First", command=on_sort_button_click)
+    sort_button.grid(row=7,column=1)
+    run_button.grid(row=7, column=2)
+    browse_button.grid(row=5, column=3)
 
     window.mainloop()
 
